@@ -1,0 +1,16 @@
+Extract the downloaded file and rename the folder it to gomap
+e.g the file structure should be like this
+
+   gomap
+     \dialogs
+     \otherfiles
+    
+place the following lines of snippet inside ckeditor/config.js
+ 
+		CKEDITOR.editorConfig = function( config )
+		{
+			
+				config.extraPlugins='gomap';
+				config.toolbar = [['Bold', 'Italic', 'Underline', 'gomap']];
+				config.gomappath = 'ckeditor/plugins/gomap';
+		};
