@@ -1,4 +1,7 @@
-Extract the downloaded file and rename the folder it to gomap
+Google map plugin for ckeditor
+==============================
+
+Extract the downloaded file and rename the folder  to gomap
 e.g the file structure should be like this
 
    gomap
