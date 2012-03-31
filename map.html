@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Google Map</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+jQuery('document').ready(function() {
+var latitude = 0;
+var logitude = 0;
+var ajax = false;
+var ursl = 	window.location.search;
+
+function loadmap(zom)
+{
+	var mapDiv = document.getElementById("map");
+	
+	ursl.substr(1,ursl.length)
+	
+					
+					 var map;
+					 var myOptions
+					 if(zom) {
+						myOptions = {
+						  zoom: 8,
+						  center: new google.maps.LatLng(latitude, logitude),
+						  mapTypeId: google.maps.MapTypeId.ROADMAP
+						};
+					 } else {
+						 
+						 myOptions = {
+						  zoom: 15,	 
+						  center: new google.maps.LatLng(latitude, logitude),
+						  mapTypeId: google.maps.MapTypeId.ROADMAP
+						};
+						
+						
+					}
+						
+		map = new google.maps.Map(mapDiv,myOptions);
+		document.getElementById('mapzoom').value =	map.getZoom();	
+		
+		latlng = map.getCenter().lat()+","+map.getCenter().lng();
+		console.log(latlng);
+		var latlng;
+		document.getElementById('mapcenter').value = latlng;
+	    function getData()
+		{
+			zoomLevel = map.getZoom();
+			latlng = map.getCenter();
+			latlng = latlng.Ua+","+latlng.Va;
+			document.getElementById('mapcenter').value = latlng;
+			document.getElementById('mapzoom').value=zoomLevel;
+		}
+		
+		if(!zom)
+		{
+			var marker = new google.maps.Marker({
+						  position: new google.maps.LatLng(latitude, logitude),
+						  map: map
+				});
+						
+		}
+		
+		
+		google.maps.event.addListener(map, 'zoom_changed', function() {
+			getData();		
+  		});
+		google.maps.event.addListener(map, 'center_changed', function() {
+			getData();		
+  		});	
+}
+
+
+if(ursl != '') {
+ursl = ursl.substr(10,ursl.length)
+jQuery.ajax({type: 'GET',cache: false,url: 'http://ajax.googleapis.com/ajax/services/search/local?v=1.0&q='+ursl,dataType: 'jsonp',success:function(data) {
+		latitude = data.responseData.results[0].lat;
+		logitude = data.responseData.results[0].lng;
+		loadmap(false);
+		ajax = true;
+		
+	}});
+} else {
+
+	if(!ajax)
+	{
+		loadmap(true);
+	}
+}
+	
+
+	
+});
+</script>
+</head>
+<body style="width:350px;height:280px;">
+<div id="map" style="width:350px;height:280px;"></div>
+<input type="hidden" id="mapzoom" value="" />
+<input type="hidden" id="mapcenter" value="" />
+</body>
+</html>
